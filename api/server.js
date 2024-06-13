@@ -1,13 +1,14 @@
-const fs = require('fs');
-const path = require('path');
+const jsonServer = require('json-server');
+const server = json-server.create();
+const router = json-server.router('./db.json');
+const middlewares = jsonServer.defaults();
+
+server.use(middlewares);
+server.use(router);
 
 module.exports = (req, res) => {
-    const dbPath = path.join(__dirname, 'db.json');
-    fs.readFile(dbPath, 'utf8', (err, data) => {
-        if (err) {
-            res.status(500).send('Error reading db.json');
-            return;
-        }
-        res.status(200).send(data);
+    server(req, res, () => {
+        res.statusCode = 404;
+        res.end('Not found');
     });
 };
