@@ -1,22 +1,13 @@
-/**
- * Simple backend, learning the basics from YouTube
- */
-// api/server.js
-const jsonServer = require('json-server');
-const server = jsonServer.create();
-const router = jsonServer.router('../db.json');  
-/**nifty lieel trick to acess the right thing
- * 
- */
-const middlewares = jsonServer.defaults();
-
-server.use(middlewares);
-server.use(router);
+const path = require('path');
+const fs = require('fs');
 
 module.exports = (req, res) => {
-    server(req, res, finalHandler(req, res));
+    const dbPath = path.join(__dirname, '../../db.json');  // Adjust the path accordingly
+    fs.readFile(dbPath, 'utf8', (err, data) => {
+        if (err) {
+            res.status(500).send('Error reading database file');
+            return;
+        }
+        res.status(200).send(data);
+    });
 };
-
-function finalHandler(req, res) {
-    res.end(); 
-}
