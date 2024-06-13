@@ -1,13 +1,22 @@
-const path = require('path');
-const fs = require('fs');
+const jsonServer = require('json-server');
+const server = jsonServer.create();
+const router = jsonServer.router('../db.json');
+const middlewares = jsonServer.defaults();
+
+server.use(middlewares);
+server.use(router);
+
 
 module.exports = (req, res) => {
-    const dbPath = path.join(__dirname, '../../db.json');  // Adjust the path accordingly
-    fs.readFile(dbPath, 'utf8', (err, data) => {
-        if (err) {
-            res.status(500).send('Error reading database file');
-            return;
-        }
-        res.status(200).send(data);
-    });
+  res.status(200).send('Hello World');
 };
+
+module.exports = (req, res) => {
+    return server(req, res, finalHandler(req, res));
+};
+
+
+
+function finalHandler(req, res) {
+    res.end(); // Make sure the response ends correctly
+}
