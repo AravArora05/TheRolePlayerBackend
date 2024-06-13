@@ -11,6 +11,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "json-server": "^0.x.x"
+    "json-server": "^0.17.4"
   }
 }
