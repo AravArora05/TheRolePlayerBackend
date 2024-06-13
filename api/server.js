@@ -1,16 +1,18 @@
 /**
  * Simple backend, learning the basics from YouTube
  */
-
+// api/server.js
 const jsonServer = require('json-server');
 const server = jsonServer.create();
-const router = jsonServer.router('db.json');
+const router = jsonServer.router('../db.json');
+/**adjusting path */
 const middlewares = jsonServer.defaults();
 
 server.use(middlewares);
 server.use(router);
 
-const port = process.env.PORT || 4000;
-server.listen(port, () => {
-  console.log(`JSON Server is running on port ${port}`);
-});
+module.exports = (req, res) => {
+    jsonServer.defaults({ readOnly: false })(req, res, () => {
+        router.handle(req, res);
+    });
+};
