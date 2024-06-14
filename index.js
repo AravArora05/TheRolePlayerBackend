@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const uri = process.env.REACT_APP_API_URL;
+const uri = process.env.MONGODB_URI;  // Corrected environment variable name
 const PORT = process.env.PORT || 3000;
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
