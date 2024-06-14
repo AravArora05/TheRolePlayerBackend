@@ -13,12 +13,14 @@ const PORT = process.env.PORT || 3000;
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
+let articlesCollection, authorsCollection;
+
 async function main() {
     try {
         await client.connect();
         const database = client.db("ContentDB");
-        const articlesCollection = database.collection("Articles");
-        const authorsCollection = database.collection("Authors");
+        articlesCollection = database.collection("Articles");
+        authorsCollection = database.collection("Authors");
         const jsonData = fs.readFileSync('./db.json', 'utf8');
         const data = JSON.parse(jsonData);
         const articlesData = data.articles;
@@ -31,13 +33,28 @@ async function main() {
         console.log(`${authorsResult.insertedCount} authors were inserted`);
     } catch (error) {
         console.error('Error:', error);
-    } finally {
-        await client.close();
     }
 }
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+app.get('/articles', async (req, res) => {
+    try {
+        const articles = await articlesCollection.find().toArray();
+        res.json(articles);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch articles' });
+    }
 });
 
-main();
+app.get('/authors', async (req, res) => {
+    try {
+        const authors = await authorsCollection.find().toArray();
+        res.json(authors);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch authors' });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    main();
+});
