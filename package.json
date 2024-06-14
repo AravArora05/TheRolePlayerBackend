@@ -12,7 +12,6 @@
   "description": "",
   "dependencies": {
     "db": "^6.0.3",
-    "json-server": "^0.17.4",
     "mongo": "^0.1.0",
     "mongodb": "^6.7.0"
   }
